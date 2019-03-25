@@ -1,0 +1,9 @@
+**/.ipynb_checkpoints
+telegram_token.py
+**/.idea
+**/__pycache__
+dbs/Корохов_Андрей.db
+searching/cvid.py
+searching/ei.py
+weather/weather_key.py
+helpful_functions/translation_key.py
