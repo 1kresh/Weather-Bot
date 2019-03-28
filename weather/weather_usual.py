@@ -10,15 +10,12 @@ from telebot import types
 
 def preparing_1(message):
     try:
-        print(7)
         lang_num = language_define(message)
         ask_text = take_phrase_2('place_input', 'today', lang_num)
         keyboard = types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
         button_geo = types.KeyboardButton(text=take_phrase_1('geolocation', lang_num), request_location=True)        
         keyboard.add(button_geo)
-        print(9)
         sent = bot.reply_to(message, ask_text, reply_markup = keyboard)
-        print(10)
         bot.register_next_step_handler(sent, weather_1)
     except Exception as e:
         report_error(e)

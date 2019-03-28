@@ -59,5 +59,5 @@ def towns_parsing():
     for town in extra_3:
         towns.append(town)
 
-    make_query('insert into Rus_Towns (Russian) values (?)', (' '.join(towns), ))
+    make_query('insert into Rus_Towns (Russian) values (?)', ('|'.join(towns), ))
 

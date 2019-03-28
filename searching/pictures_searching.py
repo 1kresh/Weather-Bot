@@ -9,7 +9,6 @@ from bs4 import BeautifulSoup
 
 def get_photo(message, search_term, n=1):
     try:
-        print(search_term)
         req = requests.get(f'http://www.bing.com/images/search?q={search_term}&qs=n&form=QBLH&scope=images&sp=-1&pq={search_term}&sc=8-6&sk=&cvid={cvid}')
         req.encoding = 'cp1251'
         soup = BeautifulSoup(req.text, 'html.parser')

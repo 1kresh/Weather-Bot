@@ -6,7 +6,6 @@ from helpful_functions.language_defining import language_define
 from telebot import types
 
 def weather_menu(message):
-    print(14)
     lang_num = language_define(message)
     text = take_phrase_2('weather', 'weather_text', lang_num)
 

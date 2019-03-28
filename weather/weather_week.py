@@ -64,12 +64,8 @@ def weather_week(message):
                         {"%s%s°C" % (temperature_max_str, temperatureHigh) if temperatureHigh else ""}\
                         {"%s%s°C" % (temperature_min_str, temperatureLow) if temperatureLow else ""}'
                 keyboard = types.InlineKeyboardMarkup()
-                print(123)
                 keyboard.add(*[types.InlineKeyboardButton(text=word, callback_data=f'{word}&{lang_num}&{town}&{date}') for word in [take_phrase_1('more', lang_num)]])
-                print(456)
-                print(inf)
                 bot.send_message(message.chat.id, inf, reply_markup=keyboard)
-                print(789)
             except KeyError:
                 inf = f'{date} {town}:\n{language_1("errors", "top_0_error", lang_num)}'
                 bot.send_message(message.chat.id, inf)

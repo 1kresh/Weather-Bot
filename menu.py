@@ -6,7 +6,6 @@ from bot import bot
 from telebot import types
 
 def menu(message):
-    print(9)
     lang_num = language_define(message)
     menu_text = take_phrase_1('menu_text', lang_num)
 

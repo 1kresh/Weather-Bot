@@ -132,12 +132,9 @@ def evolving(message):
         
 @bot.message_handler(commands=['start'])
 def start(message):
-    print(12)
     try:
         #make_query('Drop table if exists Users_All_new')
         #make_query('Drop table if exists Users_new')
-        
-        #print(make_query('select * from Users_new'))
         check_user_all_new(message, 'English')
         check_user_new(message, 'English')
         
@@ -152,7 +149,6 @@ def start(message):
         
 @bot.message_handler(commands=['help'])
 def start_menu(message):
-    print(11)
     try:
         ID = message.from_user.id
         lang_num = language_define(message)
@@ -169,7 +165,6 @@ def start_menu(message):
         report_error(e)
         
 def languages_f(message, word=None):
-    print(10)
     lang_num = 1 if 'рус' in message.text.lower() else 0
     check_user_all_new(message, take_phrase_1('languages_type', lang_num))
     make_query('update Users_new set lang = "{}"'.format(take_phrase_1('languages_type', lang_num)))   
@@ -181,7 +176,6 @@ def languages_f(message, word=None):
     
         
 def settings(message):
-    print(8)
     lang_num = language_define(message)
     markup = types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
     markup.row(take_phrase_1('languages_o', lang_num))
@@ -190,7 +184,6 @@ def settings(message):
     bot.send_message(message.chat.id, take_phrase_1('choose', lang_num), reply_markup=markup)
     
 def languages_set(message):
-    print(7)
     lang_num = language_define(message)
     markup = types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
     markup.row('Русский', 'English')
@@ -198,11 +191,9 @@ def languages_set(message):
     bot.send_message(message.chat.id, take_phrase_1('language', lang_num), reply_markup=markup)   
     
 def developing(message):
-    print(6)
     bot.send_message(message.chat.id, '@AndreyKorokhov')    
         
 def stat_menu(message):
-    print(5)
     try:
         lang_num = language_define(message)
         text = take_phrase_2('statistic', 'stats_text', lang_num)
@@ -218,16 +209,11 @@ def stat_menu(message):
         
 @bot.message_handler(content_types=["text"])
 def text_receiving(message):
-    print(4)
     t = message.text 
     ID = message.from_user.id
-    #print(make_query('select * from Users_new'))
-    #print(make_query('select * from Users'))
     if t == 'Сейчас' or t == 'Now':
-        print(3)
         preparing(message)
     elif t == 'Сегодня' or t == 'Today':
-        print(6)
         preparing_1(message)
     elif t == 'Завтра' or t == 'Tomorrow':
         preparing_2(message)
@@ -283,7 +269,6 @@ def text_receiving(message):
         
 @bot.callback_query_handler(func=lambda c: True)
 def inline(c):
-    print(3)
     if c.data == 'Подробнее':
         bot.edit_message_text(chat_id=c.message.chat.id, message_id=c.message.message_id, text=phrases['game']['advanced_rules'], parse_mode='Markdown')
     elif c.data == 'Информация':
@@ -365,7 +350,6 @@ def inline(c):
         bot.send_message(c.message.chat.id, 'C Error')
     
 def game(message):
-    print(2)
     answer = phrases['game']['short_rules']
     keyboard = types.InlineKeyboardMarkup()
     keyboard.add(*[types.InlineKeyboardButton(text=name, callback_data=name) for name in ['Подробнее']])
@@ -374,7 +358,6 @@ def game(message):
     preparing_game(message)
     
 def top(message):
-    print(1)
     people = [human[0] for human in make_query('select Name from Winners')]
     results = collections.Counter(people).most_common()
     
@@ -385,11 +368,10 @@ def top(message):
     bot.send_message(message.chat.id, text)
             
 def main():
-    print(2)
     try:
         bot.polling(none_stop=True, interval=0)
     except Exception as e:
-        print(e)
+        report_error(e)
      
 if __name__ == '__main__': 
     prepare_db()

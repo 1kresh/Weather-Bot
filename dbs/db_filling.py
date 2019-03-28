@@ -3,7 +3,6 @@ from dbs.db_filling_main import make_query
 from helpful_functions.date_time_defining import date_time
 
 def query_add(message, quest, town, inf, thumbnail_url, poem):
-    print(23)
     try:
         Quest = quest
         Town = town
@@ -19,7 +18,6 @@ def query_add(message, quest, town, inf, thumbnail_url, poem):
         report_error(e)
 
 def query_add_stat(message, stat, answer):
-    print(24)
     try:
         Statistic = stat
         Answer = answer
@@ -32,7 +30,6 @@ def query_add_stat(message, stat, answer):
         report_error(e)
 
 def check_user(message):
-    print(25)
     try:
         FirstName = message.from_user.first_name
         LastName = message.from_user.last_name
@@ -46,13 +43,12 @@ def check_user(message):
         report_error(e)
         
 def check_user_all(message):
-    print(26)
     try:
         FirstName = message.from_user.first_name
         LastName = message.from_user.last_name
         Tel_ID = message.from_user.id
         Username = message.from_user.username
-        Time_d, Time = date_time()
+        Time = date_time('date')
 
         make_query('''insert into Users_All_new (FirstName, LastName, Tel_ID, Username, Time) 
         values (?, ?, ?, ?, ?)''', (FirstName, LastName, Tel_ID, Username, Time))
@@ -60,7 +56,6 @@ def check_user_all(message):
         report_error(e)
         
 def check_user_new(message, lang):
-    print(27)
     try:
         FirstName = message.from_user.first_name
         LastName = message.from_user.last_name
@@ -74,13 +69,12 @@ def check_user_new(message, lang):
         report_error(e)
 
 def check_user_all_new(message, lang):
-    print(28)
     try:
         FirstName = message.from_user.first_name
         LastName = message.from_user.last_name
         Tel_ID = str(message.from_user.id)
         Username = message.from_user.username
-        Time_d, Time = date_time()
+        Time = date_time('date')
 
         make_query('''insert into Users_All_new (FirstName, LastName, Tel_ID, Username, Time, Lang) 
         values (?, ?, ?, ?, ?, ?)''', (FirstName, LastName, Tel_ID, Username, Time, lang))

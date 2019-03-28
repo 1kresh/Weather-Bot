@@ -17,7 +17,6 @@ import datetime
 
 def preparing(message):
     try:
-        print(2)
         lang_num = language_define(message)
         ask_text = take_phrase_2('place_input', 'now', lang_num)
         keyboard = types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
@@ -31,7 +30,6 @@ def preparing(message):
         
         
 def weather(message):
-    print(6)
     place = message.text
     lang_num = language_define(message)
 
@@ -86,7 +84,7 @@ def weather(message):
         report_error(e.args)
            
     thumbnail_url = get_photo(message, search_term)
-    #poem = get_poem(message, precipType, summary, search_term)
+    poem = get_poem(message, precipType, summary, search_term)
 
     try:
         check_user(message)

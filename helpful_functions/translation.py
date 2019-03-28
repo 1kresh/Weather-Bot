@@ -6,7 +6,6 @@ import requests
 import json
 
 def translate(to_translate, lang_num=1):
-    print(21)
     try:
         trans = make_query('select * from Translations where main=? or sub=?', (to_translate, to_translate, ))
         try: 

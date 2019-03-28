@@ -17,7 +17,6 @@ import datetime
 import time
 
 def get_inf(lang_num, latitude, longitude):
-    print(19)
     lang = f"lang={'en' if lang_num == 0 else 'ru'}"
     
     weather_inf = requests.get(f'https://api.darksky.net/forecast/{weather_key}/{latitude},{longitude}?{lang}').json()
@@ -25,7 +24,6 @@ def get_inf(lang_num, latitude, longitude):
     return weather_inf
 
 def get_main_parts(n, lang_num, town, weather_inf, name):
-    print(18)
     subjects = weather_inf['daily']['data'][n]
 
     summary = subjects['summary']
@@ -86,7 +84,6 @@ def get_coords(message, place):
         return place # town        
     
 def name_define(n, lang_num):
-    print(15)
     if n == 0:
         name = take_phrase_2('weather', 'today', lang_num)
     elif n == 1:
@@ -103,7 +100,6 @@ def name_define(n, lang_num):
     return name
 # TODO exceptions
 def get_forecast(message, place, n):
-    print(14)
     lang_num = language_define(message)
     name = name_define(n, lang_num)
     
@@ -124,9 +120,8 @@ def get_forecast(message, place, n):
         report_error(e)
          
     thumbnail_url = get_photo(message, search_term)
-    #poem = get_poem(message, precipType, summary, search_term)
+    poem = get_poem(message, precipType, summary, search_term)
     
-    print(111)
     try:      
         check_user(message)
         check_user_all(message)
@@ -136,7 +131,6 @@ def get_forecast(message, place, n):
     weather_menu(message)
     
 def words(lang_num):
-    print(20)
     timezone = take_character_2('time_all', 'timezone', lang_num)
     precipType_name = take_character_1('type', lang_num)
     humidity_name = take_character_1('humidity', lang_num)
