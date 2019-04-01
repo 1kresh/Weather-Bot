@@ -29,16 +29,15 @@ def preparing_week(message):
         
 def weather_week(message):
     place = message.text
-        
     lang_num = language_define(message)
-    
-    coords = get_coords(message, place)
-    town = coords[0]
-    if len(coords) == 3: latitude, longitude = coords[1:]
-       
-    if lang_num == 0: town = translate(town, lang_num)
+
+    try: 
+        coords = get_coords(message, place)
+        town = coords[0]
+        if len(coords) == 3: latitude, longitude = coords[1:]
         
-    try:   
+        if lang_num == 0: town = translate(town, lang_num)
+        
         weather_inf = get_inf(lang_num, latitude, longitude)
          
         full_inf = ''
@@ -72,9 +71,10 @@ def weather_week(message):
             full_inf += inf
             
     except Exception as e:
+        town = place
+        full_inf = ''
         bot.send_message(message.chat.id, take_phrase_2('errors', 'top_error', lang_num))
         report_error(e)
-        full_inf = ''
     
     try:      
         check_user(message)

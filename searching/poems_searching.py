@@ -15,12 +15,16 @@ def get_poem(message, precipType, summary, search_term):
             for way in ways:
                 try:
                     poem = get_poem_text(message, *way)
+                    
                     break
                 except:
                     continue
     else:
         poem = ''
+    if poem == '':
+        bot.send_message(message.chat.id, take_phrase_2('errors', 'poem_error', lang_num))
     return poem
+    
 
 def get_poem_text(message, precipType='', summary=''):
     if precipType:
@@ -40,8 +44,6 @@ def get_poem_text(message, precipType='', summary=''):
         poem = poem_request(message, '+'.join(summary.strip().split()))
         return poem
     else:
-        lang_num = language_define(message)
-        bot.send_message(message.chat.id, take_phrase_2('errors', 'poem_error', z))
         return ''
             
 def poem_request(message, name, n=0):
@@ -59,12 +61,11 @@ def poem_request(message, name, n=0):
             soup = BeautifulSoup(req, 'html.parser')
             poem = soup.find_all('div')[6].text
             poem = poem.replace(u'\xa0', u' ')
-            if poem != '' and 'перенесено' not in poem:
+            if poem != '' and 'перенесено' not in poem and 'Написать личное сообщение' not in poem:
                 bot.send_message(message.chat.id, poem)
                 break
         return poem
     else:
-        report_error('stihi nacrylys')
         raise Exception
  
 

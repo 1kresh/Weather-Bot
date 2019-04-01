@@ -32,12 +32,11 @@ def preparing(message):
 def weather(message):
     place = message.text
     lang_num = language_define(message)
-
-    coords = get_coords(message, place)
-    town = coords[0]
-    if len(coords) == 3: latitude, longitude = coords[1:]
-
     try:
+        coords = get_coords(message, place)
+        town = coords[0]
+        if len(coords) == 3: latitude, longitude = coords[1:]
+    
         weather_inf = get_inf(lang_num, latitude, longitude)   
         
         subjects = weather_inf['currently']
@@ -77,15 +76,18 @@ def weather(message):
                 {pressure_name}{pressure}{pressure_unit}{visibility_name}{visibility}{visibility_unit}'
         
         bot.send_message(message.chat.id, inf)
-    except Exception as e:
-        search_term = town
-        inf = '' 
-        bot.send_message(message.chat.id, take_phrase_2('errors', 'top_error', lang_num))
-        report_error(e.args)
-           
-    thumbnail_url = get_photo(message, search_term)
-    poem = get_poem(message, precipType, summary, search_term)
 
+        thumbnail_url = get_photo(message, search_term)
+        poem = get_poem(message, precipType, summary, search_term)
+
+    except Exception as e:
+        town = place
+        inf = '' 
+        thumbnail_url = ''
+        poem = ''
+        bot.send_message(message.chat.id, take_phrase_2('errors', 'top_error', lang_num))
+        report_error(e)
+           
     try:
         check_user(message)
         check_user_all(message)

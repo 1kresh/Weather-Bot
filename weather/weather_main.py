@@ -98,29 +98,32 @@ def name_define(n, lang_num):
         name = take_phrase_2('weather', 'after', lang_num) + take_phrase_2('weather', 'week_0', lang_num)
     
     return name
-# TODO exceptions
+
 def get_forecast(message, place, n):
     lang_num = language_define(message)
     name = name_define(n, lang_num)
-    
-    coords = get_coords(message, place)
-    town = coords[0]
-    if len(coords) == 3: latitude, longitude = coords[1:]
-
-    if lang_num == 0: town = translate(town, lang_num)
+    try:
+        coords = get_coords(message, place)
         
-    try:  
+        town = coords[0]
+        if len(coords) == 3: latitude, longitude = coords[1:]
+
+        if lang_num == 0: town = translate(town, lang_num)
+
         weather_inf = get_inf(lang_num, latitude, longitude)
         precipType, summary, search_term, inf = get_main_parts(n, lang_num, town, weather_inf, name)
         bot.send_message(message.chat.id, inf)
+
+        thumbnail_url = get_photo(message, search_term)
+        poem = get_poem(message, precipType, summary, search_term)
     except Exception as e:
-        search_term = town
+        town = place
+        poem = ''
+        thumbnail_url = ''
         inf = '' 
         bot.send_message(message.chat.id, take_phrase_2('errors', 'top_error', lang_num))
         report_error(e)
          
-    thumbnail_url = get_photo(message, search_term)
-    poem = get_poem(message, precipType, summary, search_term)
     
     try:      
         check_user(message)
