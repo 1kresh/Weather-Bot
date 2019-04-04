@@ -4,7 +4,7 @@ import sqlite3
 
 def make_query(*params):
     try:
-        conn = sqlite3.connect('Корохов_Андрей.db')
+        conn = sqlite3.connect('Base.db')
         c = conn.cursor()
         c.execute(*params)
         retur = c.fetchall()
