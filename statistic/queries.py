@@ -29,7 +29,7 @@ def get_query_today(message):
 def get_query_all(message): 
     try:
         lang_num = language_define(message)
-        queries = (make_query('''select count(*) from (select * from Queries ); '''))[0][0]
+        queries = (make_query('''select count(*) from (select * from Queries); '''))[0][0]
         queries_s = (make_query('''select count(*) from (select * from Queries_stat);'''))[0][0]
 
         answer = f"{take_phrase_2('stat_answers', 'requests_all', lang_num)}{queries+queries_s}"

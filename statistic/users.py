@@ -13,7 +13,7 @@ def get_users_today(message):
         lang_num = language_define(message)
         Time = date_time('date')
         
-        query = make_query(f'''select distinct Tel_ID from Users_All_new where Time=?; ''', (Time, ))
+        query = make_query('''select distinct Tel_ID from Users_All_new where Time=?; ''', (Time, ))
         
         people = set()
         for user in query:
@@ -33,14 +33,9 @@ def get_users_today(message):
 def get_users_all(message):   
     try:
         lang_num = language_define(message)
-        queries = [make_query('''select Tel_ID from Users'''), make_query('''select Tel_ID from Users_new''')]
-        
-        people = set()
-        for query in queries:
-            for user in query:
-                people.add(user[0])
+        num_of_users = make_query('select count(*) from (select Tel_ID from Users_new)')[0][0]
                     
-        answer = f"{take_phrase_2('stat_answers', 'users_all', lang_num)}{len(people)}"
+        answer = f"{take_phrase_2('stat_answers', 'users_all', lang_num)}{num_of_users}"
         bot.send_message(message.chat.id, answer)
     except Exception as e:
         report_error(e)
