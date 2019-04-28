@@ -2,6 +2,7 @@ from report_error import report_error
 
 import sqlite3
 
+
 def make_query(*params):
     try:
         conn = sqlite3.connect('Base.db')

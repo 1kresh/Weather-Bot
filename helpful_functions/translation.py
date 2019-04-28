@@ -1,9 +1,10 @@
+from dbs.db_filling_main import make_query
 from helpful_functions.translation_key import translation_key
 from report_error import report_error
-from dbs.db_filling_main import make_query
 
-import requests
 import json
+import requests
+
 
 def translate(to_translate, lang_num=1):
     try:
@@ -17,9 +18,6 @@ def translate(to_translate, lang_num=1):
 
             req_data = requests.get('https://translate.yandex.net/api/v1.5/tr.json/translate', data=data).json()
             translated = req_data['text'][0]
-
-            #make_query('insert into Translations (main, sub, num) values (?, ?, ?)', (to_translate, translated, lang_num, ))
-            #make_query('insert into Translations (main, sub, num) values (?, ?, ?)', (translated, to_translate, abs(lang_num-1), ))
             
         return translated
     except Exception as e:

@@ -32,11 +32,11 @@ phrases = {'start': ['If you would like to see the features of this bot, click o
                  'week_0': ['week', 'неделю']},
             'weather_or_stat': ['''Today weather or today statistics?''', '''Погода на сегодня или статистику на сегодня?'''],
             'statistic':
-                {'stats_text': ['''Enter these commands or choose them on the special "keyboard" to get the information about the number of users or requests today or for whole period of time:\n'Number of users today', 'Number of all users', 'Number of requests today', 'Number of all requests'.''', '''Чтобы посмотреть количество пользователей или запросов за сегодня или за весь период, введите данные команды или выберите их на специальной "клавиатуре":\n'Кол-во пользователей за сегодня','Кол-во пользователей за все время', 'Кол-во запросов за сегодня', 'Кол-во запросов за все время'.'''],
-                 'stats_text_p': ['''Enter these commands or choose them on the special "keyboard" to get the information about the number of users today or for whole period of time:\n'Number of users today', 'Number of all users', 'Number of requests today', 'Number of all requests'.''', '''Чтобы посмотреть количество пользователей за сегодня или за весь период, введите данные команды или выберите их на специальной "клавиатуре":\n'Кол-во пользователей за сегодня','Кол-во пользователей за все время', 'Кол-во запросов за сегодня', 'Кол-во запросов за все время'.'''],
-                 'stats_text_q': ['''Enter these commands or choose them on the special "keyboard" to get the information about the number of requests today or for whole period of time:\n'Number of requests today', 'Number of all requests'.''', '''Чтобы посмотреть количество запросов за сегодня или за весь период, введите данные команды или выберите их на специальной "клавиатуре":\n'Кол-во запросов за сегодня', 'Кол-во запросов за все время'.'''],
-                 'stats_text_pq_today': ['''Enter these commands or choose them on the special "keyboard" to get the information about the number of users or requests today:\n'Number of users today', 'Number of requests today'.''', '''Чтобы посмотреть количество пользователей или запросов за сегодня, введите данные команды или выберите их на специальной "клавиатуре":\n'Кол-во пользователей за сегодня', 'Кол-во запросов за сегодня'.'''],
-                 'stats_text_pq_all': ['''Enter these commands or choose them on the special "keyboard" to get the information about the number of requests today or for whole period of time:\n'Number of all users', 'Number of all requests'.''', '''Чтобы посмотреть количество запросов за сегодня или за весь период, введите данные команды или выберите их на специальной "клавиатуре":\n'Кол-во пользователей за все время', 'Кол-во запросов за все время'.'''],
+                {'stats_text': ['''Enter these commands or choose them on the special keyboard to get the information about the number of users or requests today or for whole period of time:\n'Number of users today', 'Number of all users', 'Number of requests today', 'Number of all requests'.''', '''Чтобы посмотреть количество пользователей или запросов за сегодня или за весь период, введите данные команды или выберите их на специальной клавиатуре:\n'Кол-во пользователей за сегодня','Кол-во пользователей за все время', 'Кол-во запросов за сегодня', 'Кол-во запросов за все время'.'''],
+                 'stats_text_p': ['''Enter these commands or choose them on the special keyboard to get the information about the number of users today or for whole period of time:\n'Number of users today', 'Number of all users', 'Number of requests today', 'Number of all requests'.''', '''Чтобы посмотреть количество пользователей за сегодня или за весь период, введите данные команды или выберите их на специальной клавиатуре:\n'Кол-во пользователей за сегодня','Кол-во пользователей за все время', 'Кол-во запросов за сегодня', 'Кол-во запросов за все время'.'''],
+                 'stats_text_q': ['''Enter these commands or choose them on the special keyboard to get the information about the number of requests today or for whole period of time:\n'Number of requests today', 'Number of all requests'.''', '''Чтобы посмотреть количество запросов за сегодня или за весь период, введите данные команды или выберите их на специальной клавиатуре:\n'Кол-во запросов за сегодня', 'Кол-во запросов за все время'.'''],
+                 'stats_text_pq_today': ['''Enter these commands or choose them on the special keyboard to get the information about the number of users or requests today:\n'Number of users today', 'Number of requests today'.''', '''Чтобы посмотреть количество пользователей или запросов за сегодня, введите данные команды или выберите их на специальной клавиатуре:\n'Кол-во пользователей за сегодня', 'Кол-во запросов за сегодня'.'''],
+                 'stats_text_pq_all': ['''Enter these commands or choose them on the special keyboard to get the information about the number of requests today or for whole period of time:\n'Number of all users', 'Number of all requests'.''', '''Чтобы посмотреть количество запросов за сегодня или за весь период, введите данные команды или выберите их на специальной клавиатуре:\n'Кол-во пользователей за все время', 'Кол-во запросов за все время'.'''],
                  'all_users': ['Number of all users', 'Кол-во пользователей за все время'],
                  'today_users': ['Number of users today', 'Кол-во пользователей за сегодня'],
                  'all_requests': ['Number of all requests', 'Кол-во запросов за все время'], 
@@ -86,18 +86,7 @@ phrases = {'start': ['If you would like to see the features of this bot, click o
                  'users_all': 'Количество пользователей за все время.', 
                  'requests_all': 'Количество запросов за все время.',
                  'requests_today': 'Количество запросов за сегодня.'},
-            'developing': ['Creator👨🏻‍💻', 'Разработчик👨🏻‍💻'], 
-            'developing1': ['Creator', 'Разработчик'], 
-            'choosing': ['Choose:', 'Выберите:'], 
-            'adding': ['Add', 'Добавить'],
-            'checking': ['Check', 'Проверить'],
-            'entering': ['Enter (word,type):', 'Введите (слово,тип):'],
-            'dev_back': ['Back👨🏻‍💻', 'Назад👨🏻‍💻'], 
-            'l_types': ['List of types', 'Все типы'],
-            'l_words': ['List of words', 'Все слова'],
-            'deleting_t': ['Delete type', 'Удалить тип'],
-            'deleting_w': ['Delete word', 'Удалить слово'],
-            'outputing': ['Output', 'Вывод'],
+            'developing': ['Creator👨🏻‍💻', 'Разработчик👨🏻‍💻'],
             'n_u': ['I don`t understand.', 'Я не понимаю.'], 
             'game': 
                 {'glhf': 'Приятной игры!)',
@@ -131,17 +120,22 @@ phrases = {'start': ['If you would like to see the features of this bot, click o
                 }
             }
 
+
 def take_phrase_1(word, lang_num):
     return phrases[word][lang_num]
+
 
 def take_phrase_2(word_1, word_2, lang_num):
     return phrases[word_1][word_2][lang_num]
 
+
 def take_character_1(word, lang_num):
     return phrases['characteristics'][word][lang_num]
 
+
 def take_character_2(word_1, word_2, lang_num):
     return phrases['characteristics'][word_1][word_2][lang_num]
+
 
 def take_game_phrase(word):
     return phrases['game'][word]

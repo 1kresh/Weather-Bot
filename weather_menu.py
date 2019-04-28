@@ -1,9 +1,10 @@
 from bot import bot
+from helpful_functions.language_defining import language_define
 from phrases import (
     take_phrase_1, take_phrase_2)
-from helpful_functions.language_defining import language_define
 
 from telebot import types
+
 
 def weather_menu(message):
     lang_num = language_define(message)

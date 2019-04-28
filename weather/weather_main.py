@@ -1,20 +1,21 @@
 from bot import bot
-from report_error import report_error
+from dbs.db_filling import (
+    check_user, check_user_all, query_add)
 from helpful_functions.language_defining import language_define
-from phrases import (
-    take_phrase_2, take_character_1, take_character_2)
-from weather.weather_key import weather_key
 from helpful_functions.translation import translate
+from phrases import (
+    take_character_1, take_character_2, take_phrase_2)
+from report_error import report_error
 from searching.pictures_searching import get_photo
 from searching.poems_searching import get_poem
-from dbs.db_filling import (
-    query_add, check_user, check_user_all)
 from weather_menu import weather_menu
+from weather.weather_key import weather_key
 
+import datetime
 import json
 import requests
-import datetime
 import time
+
 
 def get_inf(lang_num, latitude, longitude):
     lang = f"lang={'en' if lang_num == 0 else 'ru'}"
@@ -22,6 +23,7 @@ def get_inf(lang_num, latitude, longitude):
     weather_inf = requests.get(f'https://api.darksky.net/forecast/{weather_key}/{latitude},{longitude}?{lang}').json()
 
     return weather_inf
+
 
 def get_main_parts(n, lang_num, town, weather_inf, name):
     subjects = weather_inf['daily']['data'][n]
@@ -68,6 +70,7 @@ def get_main_parts(n, lang_num, town, weather_inf, name):
     
     return precipType, summary, search_term, inf
 
+
 def get_coords(message, place):
     try:
         longitude, latitude = message.location.longitude, message.location.latitude
@@ -82,6 +85,7 @@ def get_coords(message, place):
         return town, latitude, longitude
     except:
         return place # town        
+    
     
 def name_define(n, lang_num):
     if n == 0:
@@ -99,8 +103,9 @@ def name_define(n, lang_num):
     
     return name
 
-def get_forecast(message, place, n):
-    lang_num = language_define(message)
+
+def get_forecast(message, place, n, lang_num=None):
+    if not lang_num: lang_num = language_define(message)
     name = name_define(n, lang_num)
     try:
         coords = get_coords(message, place)
@@ -122,16 +127,16 @@ def get_forecast(message, place, n):
         thumbnail_url = ''
         inf = '' 
         bot.send_message(message.chat.id, take_phrase_2('errors', 'top_error', lang_num))
-        report_error(e)
          
-    
     try:      
         check_user(message)
         check_user_all(message)
         query_add(message, name, town, inf, thumbnail_url, poem)    
     except Exception as e:
-        report_error(e) 
+        report_error(e)
+
     weather_menu(message)
+    
     
 def words(lang_num):
     timezone = take_character_2('time_all', 'timezone', lang_num)

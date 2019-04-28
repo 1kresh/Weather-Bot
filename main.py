@@ -2,139 +2,56 @@
 #This is a  bot which was created to inform you about the weather.
 #Здравствуйте!
 #Это бот, который создан для оповещения вас о погоде.
+
 from bot import bot
-from report_error import report_error
-from phrases import (
-    phrases, take_phrase_1, take_phrase_2)
 from dbs.db_creating import prepare_db
 from dbs.db_filling import (
-    query_add, check_user, 
-    check_user_all, check_user_new, 
-    check_user_all_new)
+    check_user, check_user_all, check_user_new
+    check_user_all_new, query_add)
 from dbs.db_filling_main import make_query
-from weather.weather_main import (
-    get_inf, get_main_parts, 
-    get_coords, name_define)
-from weather.weather_now import preparing
-from weather.weather_week import preparing_week
-from weather.weather_usual import (
-    preparing_1, preparing_2, preparing_3)
+from df_token import df_token
+from game_towns.game import preparing_game
+from game_towns.parsing import towns_parsing
+from helpful_functions.language_defining import language_define
+from menu import menu
+from phrases import (
+    phrases, take_phrase_1, take_phrase_2)
+from reading_of_messages import choosing
+from report_error import report_error
 from statistic.queries import (
     get_query_today, get_query_all)
 from statistic.users import (
     get_users_today, get_users_all)
-from game_towns.game import preparing_game
-from game_towns.parsing import towns_parsing
-from reading_of_messages import l_w
-from training_of_basic_model import (
-    adding, deleting_0,
-    deleting_01, output_0,
-    checking)
-from helpful_functions.language_defining import language_define
+from stat_menu import stat_menu
 from weather_menu import weather_menu
-from menu import menu
+from weather.weather_main import (
+    get_inf, get_main_parts, 
+    get_coords, name_define)
+from weather.weather_now import preparing
+from weather.weather_usual import (
+    preparing_0, preparing_1, preparing_2)
+from weather.weather_week import preparing_week
 
-import telebot
+import apiai
+from bs4 import BeautifulSoup
+import collections
+import datetime
 import json
 import os
-from telebot import types
-import datetime 
 import random
-import sqlite3
 import requests
-import urllib
-import urllib.request
-from bs4 import BeautifulSoup
+import sqlite3
+import telebot
+from telebot import types
 import time
 from time import sleep
-import collections
+import urllib
+import urllib.request
 
 
-@bot.message_handler(commands=['dev'])
-def devel(message):
-    try:
-        if message.from_user.id == 450398500:
-            evolving(message)
-        else:
-            pass
-    except Exception as e:
-        report_error(e)
-        weather_menu(message)    
-
-def weather_or_stat_today(message, last_words):
-    try:
-        lang_num = language_define(message)
-        ask_text = take_phrase_1('weather_or_stat', lang_num)
-        keyboard = types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
-        keyboard.add(*[types.InlineKeyboardButton(text=name, callback_data=f"{name} {('_'.join(last_words) if last_words != None else 'None')}") for name in [take_phrase_2('quests', 'weather', lang_num), take_phrase_2('quests', 'stats', lang_num)]])
-        bot.send_message(message.chat.id, ask_text, reply_markup = keyboard)
-    except Exception as e:
-        report_error(e)
-        weather_menu(message)
-        
-def stats_people(message):
-    try:
-        lang_num = language_define(message)
-        text = take_phrase_1('stats_text_p', lang_num)
-        markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
-        markup.row(take_phrase_2('statistic', 'today_users', lang_num), take_phrase_2('statistic', 'all_users', lang_num))
-        markup.row(take_phrase_1('back_menu', lang_num), take_phrase_1('back_start', lang_num))
-        bot.send_message(message.chat.id, text, reply_markup=markup) 
-    except Exception as e:
-        report_error(e)
-        
-def stats_queries(message):
-    try:
-        lang_num = language_define(message)
-        text = take_phrase_1('stats_text_q', lang_num)
-        markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
-        markup.row(take_phrase_2('statistic', 'today_requests', lang_num), take_phrase_2('statistic', 'all_requests', lang_num))
-        markup.row(take_phrase_1('back_menu', lang_num), take_phrase_1('back_start', lang_num))
-        bot.send_message(message.chat.id, text, reply_markup=markup) 
-    except Exception as e:
-        report_error(e)
-        
-def stats_today(message):
-    try:
-        lang_num = language_define(message)
-        text = take_phrase_1('stats_text_pq_all', lang_num)
-        markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
-        markup.row(take_phrase_2('statistic', 'all_users', lang_num), take_phrase_2('statistic', 'all_requests', lang_num))
-        markup.row(take_phrase_1('back_menu', lang_num), take_phrase_1('back_start', lang_num))
-        bot.send_message(message.chat.id, text, reply_markup=markup) 
-    except Exception as e:
-        report_error(e)
-        
-def stats_all(message):
-    try:
-        lang_num = language_define(message)
-        text = take_phrase_1('stats_text_pq_today', lang_num)
-        markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
-        markup.row(take_phrase_2('statistic', 'today_users', lang_num), take_phrase_2('statistic', 'today_requests', lang_num))
-        markup.row(take_phrase_1('back_menu', lang_num), take_phrase_1('back_start', lang_num))
-        bot.send_message(message.chat.id, text, reply_markup=markup) 
-    except Exception as e:
-        report_error(e)
-        
-        
-def evolving(message):
-    try:
-        lang_num = language_define(message)
-        markup = types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
-        markup.row(take_phrase_1('adding', lang_num), take_phrase_1('checking', lang_num))
-        markup.row(take_phrase_1('deleting_t', lang_num), take_phrase_1('deleting_w', lang_num))
-        markup.row(take_phrase_1('outputing', lang_num))
-        markup.row(take_phrase_1('back_start', lang_num))
-        bot.send_message(message.chat.id, take_phrase_1('choosing', lang_num), reply_markup=markup)
-    except Exception as e:
-        report_error(e)
-        weather_menu(message) 
-        
 @bot.message_handler(commands=['start'])
 def start(message):
     try:
-        #make_query('Drop table if exists Users_All_new')
-        #make_query('Drop table if exists Users_new')
         check_user_all_new(message, 'English')
         check_user_new(message, 'English')
         
@@ -146,26 +63,24 @@ def start(message):
            
     except Exception as e:
         report_error(e)
-        
+
+
 @bot.message_handler(commands=['help'])
 def start_menu(message):
-    try:
-        ID = message.from_user.id
-        lang_num = language_define(message)
-        markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
-        markup.row(take_phrase_1('menu', lang_num))
-        markup.row(take_phrase_1('settings', lang_num))
-        if ID == 450398500:
-            markup.row(take_phrase_1('developing1', lang_num))
-        start_text = take_phrase_1('start', lang_num)
+    ID = message.from_user.id
+    lang_num = language_define(message)
+    markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+    markup.row(take_phrase_1('menu', lang_num))
+    markup.row(take_phrase_1('settings', lang_num))
+    start_text = take_phrase_1('start', lang_num)
+    
+    bot.send_message(message.chat.id, start_text, reply_markup=markup)
         
-        bot.send_message(message.chat.id, start_text, reply_markup=markup)    
-        
-    except Exception as e:
-        report_error(e)
-        
+
 def languages_f(message, word=None):
-    lang_num = 1 if 'рус' in message.text.lower() else 0
+    if word: lang_num = 1 if 'рус' in word.lower() else 0
+    else: lang_num = 1 if 'рус' in message.text.lower() else 0
+
     check_user_all_new(message, take_phrase_1('languages_type', lang_num))
     make_query('update Users_new set lang = "{}"'.format(take_phrase_1('languages_type', lang_num)))   
     bot.send_message(message.chat.id, text=take_phrase_1('langs', lang_num)+take_phrase_1('languages_type', lang_num))
@@ -183,6 +98,7 @@ def settings(message):
     markup.row(take_phrase_1('back', lang_num))
     bot.send_message(message.chat.id, take_phrase_1('choose', lang_num), reply_markup=markup)
     
+
 def languages_set(message):
     lang_num = language_define(message)
     markup = types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
@@ -190,35 +106,58 @@ def languages_set(message):
     markup.row(take_phrase_1('back_settings', lang_num), take_phrase_1('back_start', lang_num))
     bot.send_message(message.chat.id, take_phrase_1('language', lang_num), reply_markup=markup)   
     
+
 def developing(message):
     bot.send_message(message.chat.id, '@AndreyKorokhov')    
+
+
+def text_message_processing(text, lang):
+    request = apiai.ApiAI(df_token).text_request() 
+    request.lang = lang
+    request.session_id = 'WeatherBotHelper_ai'
+    request.query = text
+    responseJson = json.loads(request.getresponse().read().decode('utf-8'))
+    
+    try: response = responseJson['result']['parameters']
+    except: return [], None
         
-def stat_menu(message):
-    try:
-        lang_num = language_define(message)
-        text = take_phrase_2('statistic', 'stats_text', lang_num)
-        markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
-        markup.row(take_phrase_2('statistic', 'today_users', lang_num), take_phrase_2('statistic', 'all_users', lang_num))
-        markup.row(take_phrase_2('statistic', 'today_requests', lang_num), take_phrase_2('statistic', 'all_requests', lang_num))
-        if lang_num == 1:
-            markup.row('Рейтинг игроков🏆')
-        markup.row(take_phrase_1('back_menu', lang_num), take_phrase_1('back_start', lang_num))
-        bot.send_message(message.chat.id, text, reply_markup=markup) 
-    except Exception as e:
-        report_error(e)
-        
+    response_values = list(filter(lambda x: response[x] != '', list(response)))
+    _list, address = [responseJson['result']['contexts'][0]['name']], None
+
+    for value in response_values:
+        if value == 'date-time':
+            now = datetime.datetime.now()
+            try:
+                then = datetime.datetime(*map(int, response[value].split('-')))
+            except:
+                then = datetime.datetime(*map(int, (response[value].split('/')[1]).split('-')))
+            delta = then - now
+            days = delta.days
+            if days == -1: _list.append('today')
+            elif days == 0: _list.append('tommorow')
+            elif days == 1: _list.append('after tommorow')
+            elif days == 6: _list.append('week')
+            else: _list.append('now')
+        elif value == 'langs': _list.append(response[value])
+        elif value == 'address': address = list(response[value].values())[0]
+        else: _list.append(value)
+    
+    return list(set(_list)), address 
+
+
 @bot.message_handler(content_types=["text"])
 def text_receiving(message):
     t = message.text 
     ID = message.from_user.id
+    lang_num = language_define(message)
     if t == 'Сейчас' or t == 'Now':
         preparing(message)
     elif t == 'Сегодня' or t == 'Today':
-        preparing_1(message)
+        preparing_0(message)
     elif t == 'Завтра' or t == 'Tomorrow':
-        preparing_2(message)
+        preparing_1(message)
     elif t == 'Послезавтра' or t == 'Day after tomorrow':
-        preparing_3(message)
+        preparing_2(message)
     elif t == 'Неделя' or t == 'Week':
         preparing_week(message)
     elif t == 'Кол-во пользователей за сегодня' or t == 'Number of users today':
@@ -248,25 +187,30 @@ def text_receiving(message):
     elif t == '⬅️Back' or t == '⬅️Назад' or t == '⬅️Назад(Начало)' or t == '⬅️Back(Start)':
         start_menu(message)
     elif t == 'Creator👨🏻‍💻' or t == 'Разработчик👨🏻‍💻':
-        developing(message)
-    elif ID == 450398500:
-        if t == 'Creator' or t == 'Разработчик':
-            evolving(message)
-        elif t == 'Add' or t == 'Добавить':
-            adding(message)
-        elif t == 'Check' or t == 'Проверить':
-            checking(message)
-        elif t == 'Delete type' or t == 'Удалить тип':
-            deleting_0(message)
-        elif t == 'Delete word' or t == 'Удалить слово':
-            deleting_01(message)
-        elif t == 'Output' or t == 'Вывод':
-            output_0(message)
-        elif t == 'Back👨🏻‍💻' or t == 'Назад👨🏻‍💻':
-            evolving(message)   
+        developing(message) 
     else:
-        start_menu(message)
+        _list, address = text_message_processing(t, 'ru' if lang_num else 'en')
+        if 'rus' in _list:
+            languages_f(message, 'рус')
+        elif 'en' in _list:
+            languages_f(message, 'англ')
+        elif 'developer' in _list:
+            developing(message)
+        elif 'game' in _list and language_define(message) == 1:
+            game(message)
+        elif 'top' in _list and language_define(message) == 1:
+            top(message)
+        elif 'lang' in _list:
+            languages_set(message)
+        elif 'settings' in _list:
+            settings(message)
+        elif _list:
+            choosing(message, _list, address)
+        else:
+            bot.send_message(message.chat.id, take_phrase_1('n_u', lang_num)) 
+            start_menu(message)
         
+
 @bot.callback_query_handler(func=lambda c: True)
 def inline(c):
     if c.data == 'Подробнее':
@@ -274,37 +218,32 @@ def inline(c):
     elif c.data == 'Информация':
         c_req = (c.message.text).strip().split()
         town = c_req[-1]
-        if len(c_req) == 5:
-            town = f'{c_req[3]}_{c_req[4]}'
-        elif len(c_req) == 2:
-            town =  f'{c_req[0]}_{c_req[1]}'
+
+        if len(c_req) == 5: town = f'{c_req[3]}_{c_req[4]}'
+        elif len(c_req) == 2: town =  f'{c_req[0]}_{c_req[1]}'
+
+        db_inf = make_query('select inf from Inf_towns where town=?', (town, ))
         
-        db_inf = make_query(f'select inf from Inf_towns where town="{town}"')
         if len(db_inf) != 0:
             text = db_inf[0][0]
         else:
             req = requests.get(f'https://ru.wikipedia.org/wiki/{town}').text
             soup = BeautifulSoup(req, 'html.parser')
             all_p = soup.find_all('p')
-
             try:
-                #if '́' in ((all_p[0]).text).strip().split()[0]:
                 inf_extra = (all_p[0]).text
-                #else:
-                #    inf_extra = (all_p[1]).text
-
+                if 'отпатрулирована' in inf_extra: inf_extra = (all_p[1]).text
                 inf_extra = inf_extra.strip().split()
                 inf = ''
+                
                 for j in range(2):
                     for part in inf_extra:
                         l, r = part.find('['), part.find(']')
                         if l != -1: part = part.replace(part[l:r+1], '')
                         inf += f'{part} '
 
-                if 'фамилия' in inf or 'населённых пунктов' in inf:
-                    raise Exception
-                else:
-                    text = phrases['game']['all_inf'].format(inf, town)
+                if 'фамилия' in inf or 'населённых пунктов' in inf: raise Exception
+                else: text = phrases['game']['all_inf'].format(inf, town)
 
                 make_query(f'insert into Inf_towns (town, inf) values ("{town}", "{text}")')
             
@@ -331,24 +270,30 @@ def inline(c):
             
         except Exception as e:
             bot.edit_message_text(chat_id=c.message.chat.id, message_id=c.message.message_id, text=take_phrase_2('errors', 'top_error', lang_num))
-            report_error(e)
             inf = ''
-
-        try:      
+        try:
             check_user(c.message)
             check_user_all(c.message)
-            query_add(c.message, name, town, inf, '', '')    
+            query_add(c.message, name, town, inf, '', '')
         except Exception as e:
             report_error(e) 
 
     elif 'Get weather' in c.data or 'Получить погоду' in c.data:
-        last_words = c.data.strip().split()[-1]
-        l_w(c.message, 'сегодня', last_words.split('_') if last_words != 'None' else None)
+        address = c.data.strip().split('|')[-1]
+        if address != 'None': weather_0(c.message, address, lang_num=0 if 'Get' in c.data else 1)
+        else: preparing_0(c.message, c.data)
+
     elif 'Get statistics'  in c.data or 'Получить статистику' in c.data:
-        l_pq_1(c.message)           
+        lang_num = 0 if 'Get' in c.data else 1
+        text = take_phrase_1('stats_text_pq_2', lang_num)
+        markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+        markup.row(take_phrase_2('statistic', 'today_users', lang_num), take_phrase_2('statistic', 'today_requests', lang_num))
+        markup.row(take_phrase_1('back_menu', lang_num), take_phrase_1('back_start', lang_num))
+        bot.send_message(c.message.chat.id, text, reply_markup=markup)         
     else:
         bot.send_message(c.message.chat.id, 'C Error')
     
+
 def game(message):
     answer = phrases['game']['short_rules']
     keyboard = types.InlineKeyboardMarkup()
@@ -357,6 +302,7 @@ def game(message):
     
     preparing_game(message)
     
+
 def top(message):
     people = [human[0] for human in make_query('select Name from Winners')]
     results = collections.Counter(people).most_common()
@@ -366,20 +312,18 @@ def top(message):
         text += f'{result[0]} | {result[1]}\n'
 
     bot.send_message(message.chat.id, text)
-            
+
+
 def main():
-    try:
-        bot.polling(none_stop=True, interval=0)
-    except Exception as e:
-        report_error(e)
-     
+    try: bot.polling(none_stop=True, interval=0)
+    except Exception as e: report_error(e)
+
+
 if __name__ == '__main__': 
     prepare_db()
     towns_parsing()
     while True:
-        try:
-            main()
-        except:
-            sleep(1)
+        try: main()
+        except: sleep(1)
 
 

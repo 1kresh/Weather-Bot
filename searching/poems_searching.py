@@ -1,11 +1,11 @@
 from bot import bot
-from searching.ei import ei
-from report_error import report_error
 from helpful_functions.language_defining import language_define
 from phrases import take_phrase_2
+from searching.ei import ei
 
-import requests 
 from bs4 import BeautifulSoup
+import requests 
+
 
 def get_poem(message, precipType, summary, search_term):
     lang_num = language_define(message)
@@ -45,7 +45,8 @@ def get_poem_text(message, precipType='', summary=''):
         return poem
     else:
         return ''
-            
+
+
 def poem_request(message, name, n=0):
     
     req = requests.get(f'https://www.google.ru/search?newwindow=1&source=hp&ei={ei}&btnG=Поиск&q={name}+site%3Astihi.ru')

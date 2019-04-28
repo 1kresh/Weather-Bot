@@ -1,7 +1,8 @@
 from dbs.db_filling_main import make_query
 
-import requests
 from bs4 import BeautifulSoup
+import requests
+
 
 def towns_parsing():
     

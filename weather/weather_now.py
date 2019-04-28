@@ -1,37 +1,36 @@
 from bot import bot
-from report_error import report_error
 from dbs.db_filling import (
-    query_add, check_user, check_user_all)
+    check_user, check_user_all, query_add)
 from helpful_functions.language_defining import language_define
+from helpful_functions.translation import translate
 from phrases import (
     take_phrase_1, take_phrase_2, take_character_2)
-from weather.weather_main import ( 
-    get_coords, get_inf, words)
+from report_error import report_error
 from searching.pictures_searching import get_photo
 from searching.poems_searching import get_poem
 from weather_menu import weather_menu
-from helpful_functions.translation import translate
+from weather.weather_main import ( 
+    get_coords, get_inf, words)
 
-from telebot import types
 import datetime
+from telebot import types
+
 
 def preparing(message):
-    try:
-        lang_num = language_define(message)
-        ask_text = take_phrase_2('place_input', 'now', lang_num)
-        keyboard = types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
-        button_geo = types.KeyboardButton(text=take_phrase_1('geolocation', lang_num), request_location=True)
-        keyboard.add(button_geo)
-        sent = bot.reply_to(message, ask_text, reply_markup = keyboard)
-        bot.register_next_step_handler(sent, weather)
-    except Exception as e:
-        report_error(e)
-        weather_menu(message)
-        
-        
-def weather(message):
-    place = message.text
     lang_num = language_define(message)
+    ask_text = take_phrase_2('place_input', 'now', lang_num)
+    keyboard = types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
+    button_geo = types.KeyboardButton(text=take_phrase_1('geolocation', lang_num), request_location=True)
+    keyboard.add(button_geo)
+    sent = bot.reply_to(message, ask_text, reply_markup = keyboard)
+    bot.register_next_step_handler(sent, weather)
+        
+        
+def weather(message, adress=None):
+
+    place = adress if adress else message.text
+    lang_num = language_define(message)
+
     try:
         coords = get_coords(message, place)
         town = coords[0]
@@ -86,7 +85,6 @@ def weather(message):
         thumbnail_url = ''
         poem = ''
         bot.send_message(message.chat.id, take_phrase_2('errors', 'top_error', lang_num))
-        report_error(e)
            
     try:
         check_user(message)

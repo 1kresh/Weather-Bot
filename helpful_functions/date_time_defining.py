@@ -1,5 +1,6 @@
 import datetime
 
+
 def date_time(obj='all'):
     datetime_utc3 = datetime.datetime.now(datetime.timezone(datetime.timedelta(hours=3)))
     if obj == 'all':

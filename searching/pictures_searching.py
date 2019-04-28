@@ -1,11 +1,11 @@
 from bot import bot
-from searching.cvid import cvid
-from report_error import report_error
 from helpful_functions.language_defining import language_define
 from phrases import take_phrase_2
+from searching.cvid import cvid
 
-import requests
 from bs4 import BeautifulSoup
+import requests
+
 
 def get_photo(message, search_term, n=1):
     try:
@@ -22,7 +22,6 @@ def get_photo(message, search_term, n=1):
         n +=1
         if n==6:
             bot.send_message(message.chat.id, take_phrase_2('errors', 'photo_error', lang_num))
-            report_error(e)
             return ''
         else:
             get_photo(message, search_term, n+1)

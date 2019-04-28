@@ -1,6 +1,7 @@
-from report_error import report_error
 from dbs.db_filling_main import make_query
 from helpful_functions.date_time_defining import date_time
+from report_error import report_error
+
 
 def query_add(message, quest, town, inf, thumbnail_url, poem):
     try:
@@ -17,6 +18,7 @@ def query_add(message, quest, town, inf, thumbnail_url, poem):
     except Exception as e:
         report_error(e)
 
+
 def query_add_stat(message, stat, answer):
     try:
         Statistic = stat
@@ -28,6 +30,7 @@ def query_add_stat(message, stat, answer):
         values (?, ?, ?, ?, ?)''', (Statistic, Answer, Tel_ID, Time_d, Time))
     except Exception as e:
         report_error(e)
+
 
 def check_user(message):
     try:
@@ -42,6 +45,7 @@ def check_user(message):
     except Exception as e:
         report_error(e)
         
+
 def check_user_all(message):
     try:
         FirstName = message.from_user.first_name
@@ -55,6 +59,7 @@ def check_user_all(message):
     except Exception as e:
         report_error(e)
         
+
 def check_user_new(message, lang):
     try:
         FirstName = message.from_user.first_name
@@ -67,6 +72,7 @@ def check_user_new(message, lang):
             values (?, ?, ?, ?, ?)''', (FirstName, LastName, Tel_ID, Username, lang, ))
     except Exception as e:
         report_error(e)
+
 
 def check_user_all_new(message, lang):
     try:

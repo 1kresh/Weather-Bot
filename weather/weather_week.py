@@ -1,34 +1,33 @@
 from bot import bot
-from report_error import report_error
+from dbs.db_filling import (
+    check_user, check_user_all, query_add)
 from helpful_functions.language_defining import language_define
-from phrases import (
-    take_phrase_1, take_phrase_2, 
-    take_character_1, take_character_2)
 from helpful_functions.translation import translate
+from phrases import (
+    take_character_1, take_character_2,
+    take_phrase_1, take_phrase_2)
+from report_error import report_error
 from weather.weather_main import (
     get_coords, get_inf)
 from weather_menu import weather_menu
-from dbs.db_filling import (
-    query_add, check_user, check_user_all)
 
-from telebot import types
 import datetime
+from telebot import types
+
 
 def preparing_week(message):
-    try:
-        n = language_define(message)
-        ask_text = take_phrase_2('place_input', 'week', n)
-        keyboard = types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
-        button_geo = types.KeyboardButton(text=take_phrase_1('geolocation', n), request_location=True)
-        keyboard.add(button_geo)
-        sent = bot.reply_to(message, ask_text, reply_markup = keyboard)
-        bot.register_next_step_handler(sent, weather_week)
-    except Exception as e:
-        report_error(e)
-        weather_menu(message)
+    n = language_define(message)
+    ask_text = take_phrase_2('place_input', 'week', n)
+    keyboard = types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
+    button_geo = types.KeyboardButton(text=take_phrase_1('geolocation', n), request_location=True)
+    keyboard.add(button_geo)
+    sent = bot.reply_to(message, ask_text, reply_markup = keyboard)
+    bot.register_next_step_handler(sent, weather_week)
         
-def weather_week(message):
-    place = message.text
+        
+def weather_week(message, adress=None):
+
+    place = adress if adress else message.text
     lang_num = language_define(message)
 
     try: 
@@ -74,7 +73,6 @@ def weather_week(message):
         town = place
         full_inf = ''
         bot.send_message(message.chat.id, take_phrase_2('errors', 'top_error', lang_num))
-        report_error(e)
     
     try:      
         check_user(message)

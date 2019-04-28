@@ -1,9 +1,12 @@
 from bot import bot
-from phrases import take_phrase_1, take_game_phrase
-from menu import menu
 from dbs.db_filling_main import make_query
+from menu import menu
+from phrases import (
+    take_game_phrase, take_phrase_1)
 from telebot import types
+
 import random
+
 
 def nickname_define(message):
 
@@ -15,13 +18,12 @@ def nickname_define(message):
         
     return nickname
     
+
 def prepare_game_db(message):
-    try:
-        nickname = nickname_define(message)
-        make_query(f"DROP TABLE IF EXISTS {nickname};")
-        make_query(f"CREATE TABLE {nickname} (Ua_ID INTEGER PRIMARY KEY AUTOINCREMENT, Town text);")
-    except Exception as e:
-        report_error(e)
+    nickname = nickname_define(message)
+    make_query(f"DROP TABLE IF EXISTS {nickname};")
+    make_query(f"CREATE TABLE {nickname} (Ua_ID INTEGER PRIMARY KEY AUTOINCREMENT, Town text);")
+
 
 def preparing_game(message, state=1):
     if state == 1:
@@ -37,6 +39,7 @@ def preparing_game(message, state=1):
     sent = bot.send_message(message.chat.id, text)
     bot.register_next_step_handler(sent, game_play)
     
+
 def game_play(message):
     place = message.text
 
@@ -76,6 +79,7 @@ def game_play(message):
         else:
             preparing_game(message, 0)
         
+
 def preparing_game_1(message, place, towns, forbidden_letters, state=0):
     for i in range(1, 4):
         if place[-i] not in forbidden_letters:
@@ -156,7 +160,6 @@ def game_play_1(message):
             preparing_game_1(message, used_towns[-1], towns, forbidden_letters, state=1)
         
         
-
 def finish(message, nickname, letter=None):
     if letter:
         cong_text = take_game_phrase('congrats_letter').format(letter.upper())
@@ -166,6 +169,7 @@ def finish(message, nickname, letter=None):
     bot.send_message(message.chat.id, cong_text, parse_mode='Markdown')
     make_query('insert into Winners (Name) values (?)', (nickname, ))
     menu(message)
+
 
 def defeat(message, letter):
     bot.send_message(message.chat.id, take_game_phrase('defeat').format(letter), parse_mode='Markdown')

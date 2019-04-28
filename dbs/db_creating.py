@@ -1,5 +1,6 @@
-from report_error import report_error
 from dbs.db_filling_main import make_query
+from report_error import report_error
+
 
 def prepare_db():
     try:
