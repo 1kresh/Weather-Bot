@@ -1,10 +1,10 @@
 **/.ipynb_checkpoints
-telegram_token.py
 **/.idea
 **/__pycache__
-Корохов_Андрей.db
+Base.db
+df_token.py
+helpful_functions/translation_key.py
 searching/cvid.py
 searching/ei.py
+telegram_token.py
 weather/weather_key.py
-helpful_functions/translation_key.py
-training_of_basic_model.py
