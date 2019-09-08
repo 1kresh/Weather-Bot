@@ -108,7 +108,7 @@ def languages_set(message):
     
 
 def developing(message):
-    bot.send_message(message.chat.id, '@KreshK')    
+    bot.send_message(message.chat.id, '@kresh_one')    
 
 
 def text_message_processing(text, lang):
